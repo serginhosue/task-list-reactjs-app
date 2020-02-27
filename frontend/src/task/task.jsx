@@ -19,6 +19,7 @@ export default class Task extends Component {
         this.handleMarkAsDone = this.handleMarkAsDone.bind(this)
         this.handleMarkAsPending = this.handleMarkAsPending.bind(this)
         this.handleSearch = this.handleSearch.bind(this)
+        this.handleClear = this.handleClear.bind(this)
 
         this.refresh()
     }
@@ -72,6 +73,10 @@ export default class Task extends Component {
         this.refresh(this.state.description)
     }
 
+    handleClear(){
+        this.refresh()
+    }
+
 
     render(){
         return (
@@ -82,6 +87,7 @@ export default class Task extends Component {
                     handleChange={this.handleChange}
                     handleAdd={this.handleAdd}
                     handleSearch={this.handleSearch}
+                    handleClear={this.handleClear}
                     />
                 <TaskList 
                     list={this.state.list}
