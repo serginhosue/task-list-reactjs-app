@@ -18,6 +18,7 @@ export default class Task extends Component {
         this.handleRemove = this.handleRemove.bind(this)
         this.handleMarkAsDone = this.handleMarkAsDone.bind(this)
         this.handleMarkAsPending = this.handleMarkAsPending.bind(this)
+        this.handleSearch = this.handleSearch.bind(this)
 
         this.refresh()
     }
@@ -38,32 +39,37 @@ export default class Task extends Component {
     }
 
 
-    refresh(){
-        axios.get(`${urlApi}?sort=-create_date`)
+    refresh(description = ''){
+        const search = description ? `&description__regex=/${description}/` : ''
+        axios.get(`${urlApi}?sort=-create_date${search}`)
             .then(resp =>
-                this.setState({ ...this.state, description: '', list: resp.data})
+                this.setState({ ...this.state, description, list: resp.data})
             )
     }
 
     handleRemove(task){
         axios.delete(`${urlApi}/${task._id}`)
             .then(
-                    resp => this.refresh()
+                    resp => this.refresh(this.state.description)
                 )
     }
 
     handleMarkAsDone(task){
         axios.put(`${urlApi}/${task._id}`, { ... task, done: true})
             .then(
-                resp => this.refresh()
+                resp => this.refresh(this.state.description)
             )
     }
 
     handleMarkAsPending(task){
         axios.put(`${urlApi}/${task._id}`, { ... task, done: false})
             .then(
-                resp => this.refresh()
+                resp => this.refresh(this.state.description)
             )
+    }
+
+    handleSearch(){
+        this.refresh(this.state.description)
     }
 
 
@@ -74,7 +80,9 @@ export default class Task extends Component {
                 <TaskForm 
                     description={this.state.description}
                     handleChange={this.handleChange}
-                    handleAdd={this.handleAdd}/>
+                    handleAdd={this.handleAdd}
+                    handleSearch={this.handleSearch}
+                    />
                 <TaskList 
                     list={this.state.list}
                     handleRemove={this.handleRemove}
