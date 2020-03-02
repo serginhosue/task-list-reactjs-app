@@ -1,4 +1,5 @@
 import axios from 'axios'
+import taskForm from './taskForm'
 
 const URL_API = 'http://localhost:3003/api/tasks'
 
@@ -15,10 +16,11 @@ export const search = () => {
     }
 }
 
+
 export const add = (description) => {
-    const request = axios.post(URL_API, { description })
-    return [
-        { type: 'TASK_ADDED',payload: request },
-        search()
-    ]
+    return dispach => {
+        axios.post(URL_API, { description })
+        .then(resp => dispach({ type: 'TASK_ADDED', payload: resp.data}))
+        .then(resp => dispach(search()))
+    }
 }
