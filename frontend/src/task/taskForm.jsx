@@ -1,8 +1,12 @@
 import React from 'react'
 import Grid from '../template/grid'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
+import { changeDescription } from './taskActions'
 import IconButton from '../template/iconButton'
 
-export default props => {
+const TaskForm = props => {
 
 
     const keyHandler = (e) => {
@@ -20,7 +24,7 @@ export default props => {
             <Grid cols='12 9 10'>
                 <input id='description' className='form-control' 
                     placeholder='Add Task' 
-                    onChange={props.handleChange}
+                    onChange={props.changeDescription}
                     onKeyUp={keyHandler}
                     value={props.description}/> 
             </Grid>
@@ -33,3 +37,13 @@ export default props => {
 
     )
 }
+
+const mapStateToProps = state => ({description: state.task.description})
+
+const mapDispachToProps = 
+    dispach => 
+        bindActionCreators(
+            { changeDescription }
+        , dispach)
+
+export default connect(mapStateToProps, mapDispachToProps)(TaskForm)
