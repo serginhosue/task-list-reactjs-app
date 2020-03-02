@@ -14,3 +14,11 @@ export const search = () => {
         payload: request
     }
 }
+
+export const add = (description) => {
+    const request = axios.post(URL_API, { description })
+    return {
+        type: 'TASK_ADDED',
+        payload: request
+    }
+}
