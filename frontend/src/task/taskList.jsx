@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import IconButton from '../template/iconButton'
+import { bindActionCreators } from 'redux'
 
+import IconButton from '../template/iconButton'
+import { markAsDone, markAsPending, remove } from './taskActions'
 
 
 const TaskList = props => {
@@ -14,13 +16,13 @@ const TaskList = props => {
                     <td className={task.done ? 'markAsDone' : ''}>{task.description}</td>
                     <td>
                         <IconButton style='success' icon='check' hide={task.done}
-                            onClick={ () => props.handleMarkAsDone(task)}
+                            onClick={ () => props.markAsDone(task)}
                         />
                         <IconButton style='warning' icon='undo' hide={!task.done}
-                            onClick={ () => props.handleMarkAsPending(task)}
+                            onClick={ () => props.markAsPending(task)}
                         />
                         <IconButton style='danger' icon='trash-o'
-                            onClick={ () => props.handleRemove(task)}
+                            onClick={ () => props.remove(task)}
                         />
                     </td>
                 </tr>
@@ -46,6 +48,6 @@ const TaskList = props => {
 
 const mapStateToProps = state => ({ list: state.task.list})
 
-// const mapDispachAction()
+const mapDispachToProps = dispach => bindActionCreators({ markAsDone, markAsPending, remove }, dispach)
 
-export default connect(mapStateToProps)(TaskList)
+export default connect(mapStateToProps, mapDispachToProps)(TaskList)
